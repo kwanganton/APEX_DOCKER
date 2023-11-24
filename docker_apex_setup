@@ -2,7 +2,7 @@
 1.INSTALL DOCKER
 
 docker version
-sudo yum install docker -y or 
+sudo yum install docker -y or sudo apt install docker.io
 
 
 2.PULL REPO
