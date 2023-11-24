@@ -45,6 +45,95 @@ mkdir /home/oracle/software/apex
 mkdir /home/oracle/software/ords
 mkdir /home/oracle/scripts
 
+9.COPY APEX images
+cp -r /home/oracle/apex/images /home/oracle/software/apex
+cd /home/oracle/
+
+10.Install Utilities
+su
+dnf update
+dnf install sudo -y
+dnf install nano -y
+
+11.Modify Sudoers
+nano /etc/sudoers
+
+**Add to DEFAULTS**
+Defaults !lecture
+
+**Add to End of file**
+oracle ALL=(ALL) NOPASSWD: ALL
+
+12.Install JAVA
+dnf install java-17-openjdk -y
+
+13.Setup ORDS 
+mkdir /etc/ords
+mkdir /etc/ords/config
+mkdir /home/oracle/logs
+chmod -R 777 /etc/ords
+java -version
+
+*************************************************************************************************
+OUTPUT
+
+openjdk version "17.0.6" 2023-01-17 LTS
+OpenJDK Runtime Environment (Red_Hat-17.0.6.0.10-3.el8_7) (build 17.0.6+10-LTS)
+OpenJDK 64-Bit Server VM (Red_Hat-17.0.6.0.10-3.el8_7) (build 17.0.6+10-LTS, mixed mode, sharing)
+***************************************************************************************************
+
+14.Config ORDS
+yum-config-manager --add-repo=http://yum.oracle.com/repo/OracleLinux/OL8/oracle/software/x86_64
+dnf install ords -y
+
+export _JAVA_OPTIONS="-Xms512M -Xmx512M"
+ords --config /etc/ords/config install
+
+****************************************************************************************************
+Installation Type > Choose option [2] Enter
+Connection Type > Choose option [1] Enter
+host name > Enter
+listen port > Enter
+service name > FREEPDB1
+administrator username > SYS
+password > YOUR_PASSWORD
+default tablespace > Enter
+temp tablespace > Enter
+features > Enter
+Start ORDS > [1] Enter <-- Standalone Mode
+protocol > [1] < http
+port > [1] <-- 8080
+Static Resources > /home/oracle/software/apex/images
+
+OUTPUT
+Oracle REST Data Services version : 23.1.0.r0861423
+Oracle REST Data Services server info: jetty/10.0.12
+Oracle REST Data Services java info: OpenJDK 64-Bit Server VM 17.0.6+10-LTS
+******************************************************************************************************
+
+15.Create Scripts
+
+nano /home/oracle/scripts/start_ords.sh
+****PASTE******
+export ORDS_HOME=/usr/local/bin/ords
+export _JAVA_OPTIONS="-Xms512M -Xmx512M"
+LOGFILE=/home/oracle/logs/ords-`date +"%Y""%m""%d"`.log
+nohup ${ORDS_HOME} --config /etc/ords/config serve >> $LOGFILE 2>&1 & echo "View log file with : tail -f $LOGFILE"
+
+nano /home/oracle/scripts/stop_ords.sh
+****PASTE******
+kill `ps -ef | grep [o]rds.war | awk '{print $2}'`
+
+nano /opt/oracle/scripts/startup/01_auto_ords.sh
+****PASTE******
+sudo sh /home/oracle/scripts/start_ords.sh
+
+
+loginctl enable-linger $UID
+
+docker restart 23cfree
+
+
 
 
 
