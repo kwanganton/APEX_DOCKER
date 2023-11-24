@@ -133,6 +133,68 @@ loginctl enable-linger $UID
 
 docker restart 23cfree
 
+16.Change Image to CDN
+cd /home/oracle/apex/utilities
+sqlplus as sysdba
+@reset_image_prefix.sql
+
+
+17.NGINX setup
+**UBUNTU**
+sudo apt update
+sudo apt install nginx
+
+systemctl start nginx
+systemctl status nginx
+
+sudo nano /etc/nginx/conf.d/mydomain.conf
+
+**PASTE**
+server {
+       server_name ubuntu.powerdashapps.com;
+  location /ords/ {
+    proxy_pass http://localhost:8023/ords/;
+    proxy_set_header Origin "" ;
+    proxy_set_header X-Forwarded-Host $host:$server_port;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_connect_timeout       600;
+    proxy_send_timeout          600;
+    proxy_read_timeout          600;
+    send_timeout                600;
+  }
+
+  location /i/ {
+    proxy_pass http://localhost:8023/ords/i/;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+
+
+location / {
+    rewrite ^/$ /ords/f?p=100:0 permanent;
+
+  }
+}
+
+*****************************************
+   sudo nginx -t
+   sudo service nginx restart
+  
+18.CERTBOT
+**UBUNTU**
+sudo snap install core; sudo snap refresh core
+sudo apt remove certbot
+sudo snap install --classic certbot
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+sudo ufw allow 443
+sudo certbot --nginx
+
+
+
+
 
 
 
