@@ -112,6 +112,9 @@ Oracle REST Data Services server info: jetty/10.0.12
 Oracle REST Data Services java info: OpenJDK 64-Bit Server VM 17.0.6+10-LTS
 ******************************************************************************************************
 
+******MODIFY JDBC MAX & MIN LIMITS FOR PRODUCTION*********
+
+
 15.Create Scripts
 
 nano /home/oracle/scripts/start_ords.sh
