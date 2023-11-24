@@ -114,8 +114,11 @@ Oracle REST Data Services java info: OpenJDK 64-Bit Server VM 17.0.6+10-LTS
 
 ******MODIFY JDBC MAX & MIN LIMITS FOR PRODUCTION*********
 
-ords --config /etc/ords/config set jdbc.InitialLimit 20
-ords --config /etc/ords/config set jdbc.MaxLimit 100
+nano /etc/ords/config/databases/default/pool.xml
+
+<entry key="db.sid">orcl</entry><entry key="jdbc.MaxLimit">500</entry>
+<entry key="jdbc.InitialLimit">20</entry>
+
 
 
 15.Create Scripts
