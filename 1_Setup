@@ -1,0 +1,45 @@
+1.INSTALL DOCKER
+
+docker version
+sudo yum install docker -y or 
+
+
+2.PULL REPO
+
+docker pull container-registry.oracle.com/database/free:latest
+
+3.MAP host & container PORTS
+
+docker run -d -it --name 23cfree -p 8521:1521 -p 8500:5500 -p 8023:8080 -p 9043:8443 -e ORACLE_PWD=YOUR_PASSWORD container-registry.oracle.com/database/free:latest
+
+4.INSTALL APEX
+docker exec -it 23cfree /bin/bash
+
+curl -o apex-latest.zip https://download.oracle.com/otn_software/apex/apex-latest.zip
+unzip apex-latest.zip
+rm apex-latest.zip
+cd apex
+
+**WAIT 15mins for all scripts to be completed**
+
+5.SQLPLUS LOGIN
+sqlplus / as sysdba
+
+show pdbs;
+**Ensure databases are OPEN and not MOUNTED**
+
+ALTER SESSION SET CONTAINER = FREEPDB1;
+@apexins.sql SYSAUX SYSAUX TEMP /i/
+
+6.Unlock PUBLIC Accounts
+ALTER USER APEX_PUBLIC_USER ACCOUNT UNLOCK;
+ALTER USER APEX_PUBLIC_USER IDENTIFIED BY YOUR_PASSWORD;
+
+7.Change ADMIN Password
+@apxchpwd.sql
+exit
+
+
+
+
+
