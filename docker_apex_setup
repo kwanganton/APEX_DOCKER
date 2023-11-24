@@ -139,6 +139,8 @@ cd /home/oracle/apex/utilities
 sqlplus as sysdba
 @reset_image_prefix.sql
 
+https://static.oracle.com/cdn/apex/23.2.0/
+
 
 17.NGINX setup
 **UBUNTU**
