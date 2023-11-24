@@ -193,7 +193,18 @@ sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo ufw allow 443
 sudo certbot --nginx
 
+19.Firewalld
 
+sudo apt update
+sudo apt install firewalld
+
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
+
+sudo firewall-cmd --state
+
+sudo firewall-cmd --permanent --add-service={http,https} --permanent
+sudo firewall-cmd --add-port=8023/tcp --permanent
 
 
 
