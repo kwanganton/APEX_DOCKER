@@ -39,6 +39,12 @@ ALTER USER APEX_PUBLIC_USER IDENTIFIED BY YOUR_PASSWORD;
 @apxchpwd.sql
 exit
 
+8.MAKE DIRECTORIES
+mkdir /home/oracle/software
+mkdir /home/oracle/software/apex
+mkdir /home/oracle/software/ords
+mkdir /home/oracle/scripts
+
 
 
 
