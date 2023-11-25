@@ -6,6 +6,8 @@ GRANT datapump_exp_full_database TO <USERNAME>;
 GRANT datapump_imp_full_database TO <USERNAME>;
 EXIT;
 
+----datapump is a standalone utility, not a SQL*Plus command. You need to run it from the OS command line.---
+
 expdp <ORIGINAL-DATABASE-USERNAME>/<PASSWORD>@<PDB-NAME> schemas=<ORIGINAL-DATABASE-USERNAME> directory=EXP_DIR dumpfile=db1.dmp logfile=db1.log
 **expdp CPA/CPA123456@localhost/FREEPDB1 schemas=CPA directory=mydumps dumpfile=db1.dmp logfile=db1.log**
 exp CPA/CPA123456@localhost/FREEPDB1 schemas=CPA directory=mydumps dumpfile=db1.dmp logfile=db1.log
