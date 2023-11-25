@@ -1,14 +1,14 @@
+mkdir /home/oracle/dumps
+
 sqlplus / as sysdba
 ALTER SESSION SET CONTAINER = FREEPDB1;
-CREATE OR REPLACE DIRECTORY mydumps AS '/home/oracle';
+CREATE OR REPLACE DIRECTORY mydumps AS '/home/oracle/dumps';
 GRANT READ, WRITE ON DIRECTORY mydumps TO <USERNAME>;
 GRANT datapump_exp_full_database TO <USERNAME>;
 GRANT datapump_imp_full_database TO <USERNAME>;
 EXIT;
 
 ----datapump is a standalone utility, not a SQL*Plus command. You need to run it from the OS command line.---
-
+EXPORTING DATA
 expdp <ORIGINAL-DATABASE-USERNAME>/<PASSWORD>@<PDB-NAME> schemas=<ORIGINAL-DATABASE-USERNAME> directory=EXP_DIR dumpfile=db1.dmp logfile=db1.log
-**expdp CPA/CPA123456@localhost/FREEPDB1 schemas=CPA directory=mydumps dumpfile=db1.dmp logfile=db1.log**
-exp CPA/CPA123456@localhost/FREEPDB1 schemas=CPA directory=mydumps dumpfile=db1.dmp logfile=db1.log
-expdp CPA/CPA123456@FREEPDB1 schemas=CPA directory=mydumps dumpfile=db1.dmp logfile=db1.log
+**expdp CPA/PASSWORD@FREEPDB1 schemas=CPA directory=mydumps dumpfile=db1.dmp logfile=db1.log**
