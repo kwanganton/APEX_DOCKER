@@ -9,6 +9,28 @@ GRANT datapump_imp_full_database TO <USERNAME>;
 EXIT;
 
 ----datapump is a standalone utility, not a SQL*Plus command. You need to run it from the OS command line.---
+
+
 EXPORTING DATA
-expdp <ORIGINAL-DATABASE-USERNAME>/<PASSWORD>@<PDB-NAME> schemas=<ORIGINAL-DATABASE-USERNAME> directory=EXP_DIR dumpfile=db1.dmp logfile=db1.log
+expdp <ORIGINAL-DATABASE-USERNAME>/<PASSWORD>@<PDB-NAME> schemas=<ORIGINAL-DATABASE-USERNAME> 
+directory=EXP_DIR dumpfile=db1.dmp logfile=db1.log
+
 **expdp CPA/PASSWORD@FREEPDB1 schemas=CPA directory=mydumps dumpfile=db1.dmp logfile=db1.log**
+
+IMPORTING DATA
+1.Use WINSCP to transfer dump to the host
+2.Copy to container
+   docker cp <source_file_path> <container_name>:<destination_file_path>
+
+ **docker cp /home/EXP_SCHM_CPA_23_11_24.DMP 23cfree:/home/oracle/dumps**
+3.IMPORT
+
+impdp system/<SYSTEM-PASSWORD>@<PDB-NAME> schemas=<ORIGNAL-USERNAME>  remap_schema=<ORIGNAL-USERNAME>:<NEW-USERNAME-TO-BE-CREATED> 
+directory=EXP_DIR dumpfile=db1.dmp logfile=db1.log
+ **impdp CPA/CPA123456@FREEPDB1 schemas=CPA  remap_schema=CPA:CPA directory=mydumps
+dumpfile=EXP_SCHM_CPA_23_11_24.DMP logfile=db2.log**
+   
+
+
+
+
