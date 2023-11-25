@@ -1,1 +1,12 @@
+sqlplus / as sysdba
+ALTER SESSION SET CONTAINER = FREEPDB1;
+CREATE OR REPLACE DIRECTORY mydumps AS '/home/oracle';
+GRANT READ, WRITE ON DIRECTORY mydumps TO <USERNAME>;
+GRANT datapump_exp_full_database TO <USERNAME>;
+GRANT datapump_imp_full_database TO <USERNAME>;
+EXIT;
 
+expdp <ORIGINAL-DATABASE-USERNAME>/<PASSWORD>@<PDB-NAME> schemas=<ORIGINAL-DATABASE-USERNAME> directory=EXP_DIR dumpfile=db1.dmp logfile=db1.log
+**expdp CPA/CPA123456@localhost/FREEPDB1 schemas=CPA directory=mydumps dumpfile=db1.dmp logfile=db1.log**
+exp CPA/CPA123456@localhost/FREEPDB1 schemas=CPA directory=mydumps dumpfile=db1.dmp logfile=db1.log
+expdp CPA/CPA123456@FREEPDB1 schemas=CPA directory=mydumps dumpfile=db1.dmp logfile=db1.log
